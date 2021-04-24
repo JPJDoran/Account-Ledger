@@ -20,3 +20,4 @@ Potential improvements:
 - Functionality to add other accounts
 - Re-usable transaction references
 - Filtering on transactions
+- Use laravel email notifications for when a user enters their saving target or overdraft
