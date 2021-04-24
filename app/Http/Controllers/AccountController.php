@@ -56,6 +56,7 @@ class AccountController extends Controller
 
         // Get account transactions
         $transactions = Auth::user()->Transactions->sortByDesc('created_at')->paginate(15);
+        $transactions->withPath(''); // Prevents AJAX overwriting the pagination url
         $transactions = view('accounts.partials.account-transactions', compact('account', 'transactions'))->render();
 
         return view('accounts.partials.account-details', compact('summary', 'transactions'))->render();
