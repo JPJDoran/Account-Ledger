@@ -11,7 +11,7 @@
                                 {!! $accountSelect !!}
                             </div>
                             <div class="col text-right">
-                                <button class="btn btn-primary" type="button" name="button">Manage</button>
+                                <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#transaction-modal">Manage</button>
                             </div>
                         </div>
 
@@ -25,4 +25,8 @@
             </div>
         </div>
     </div>
+@endsection
+
+@section('modals')
+    @include('accounts.modals.new-transaction-modal')
 @endsection

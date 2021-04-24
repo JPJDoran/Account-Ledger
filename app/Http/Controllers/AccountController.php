@@ -4,9 +4,12 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Validator;
 
 // Models
 use App\Models\Account;
+use App\Models\Withdrawal;
+use App\Models\Deposit;
 
 class AccountController extends Controller
 {
@@ -52,7 +55,7 @@ class AccountController extends Controller
         $summary = $this->getAccountSummary($account);
 
         // Get account transactions
-        $transactions = Auth::user()->Transactions->sortByDesc('date');
+        $transactions = Auth::user()->Transactions->sortByDesc('created_at')->paginate(25);
         $transactions = view('accounts.partials.account-transactions', compact('account', 'transactions'))->render();
 
         return view('accounts.partials.account-details', compact('summary', 'transactions'))->render();
@@ -77,6 +80,70 @@ class AccountController extends Controller
             $summaryText = __('accounts.overdraft-balance');
         }
 
-        return view('accounts.partials.account-summary', compact('status', 'summaryText'))->render();
+        return view('accounts.partials.account-summary', compact('account', 'status', 'summaryText'))->render();
+    }
+
+    public function newTransaction(Request $request) {
+        if (!IS_AJAX) {
+            abort('404');
+        }
+
+        $validate = Validator::make($request->all(), [
+            'reference'     => 'required|max:255|string',
+            'amount'        => 'required|between:0,999999999.99',
+            'date'          => 'required',
+            'transaction'   => 'required'
+        ]);
+
+        if (!$validate->passes()) {
+			return response()->json(['error' => true, 'validation' => $validate->errors(), 'message' => __('accounts.transaction-error')]);
+        }
+
+        $account = Account::find($request->account_id);
+
+        // Account not found, so error out
+        if (!$account) {
+            return response()->json(['error' => true, 'message' => __('accounts.account-not-found')]);
+        }
+
+        // Account doesn't belong to user, so error out
+        if ($account->user_id != Auth::id()) {
+            return response()->json(['error' => true, 'message' => __('accounts.account-owner-mismatch')]);
+        }
+
+        $overdraft = $account->overdraft ?? 0;
+
+        $transaction = [
+            'account_id' => $request->account_id,
+            'user_id' => Auth::id(),
+            'reference' => $request->reference,
+            'amount' => $request->amount,
+            'date' => date('Y-m-d H:i:s', strtotime($request->date))
+        ];
+
+        // -1 = debit, otherwise credit
+        if ($request->transaction == -1) {
+            $newBalance = $account->balance - $request->amount;
+
+            if ($newBalance < 0 && $overdraft == 0) {
+                return response()->json(['error' => true, 'message' => __('accounts.no-overdraft')]);
+            }
+
+            if ($newBalance < ($overdraft * -1)) {
+                return response()->json(['error' => true, 'message' => __('accounts.overdraft-exceeded')]);
+            }
+
+            $transaction['balance'] = $newBalance;
+
+            Withdrawal::create($transaction);
+        } else {
+            $transaction['balance'] = $account->balance + $request->amount;
+
+            Deposit::create($transaction);
+        }
+
+        // Update account balance
+        $account->balance = $transaction['balance'];
+        $account->save();
     }
 }

@@ -17,4 +17,6 @@ Auth::routes();
 
 Route::group(['middleware' => ['auth']], function () {
     Route::get('/', [App\Http\Controllers\AccountController::class, 'index'])->name('account');
+
+    Route::post('/accounts/addTransaction', [App\Http\Controllers\AccountController::class, 'newTransaction']);
 });

@@ -23,7 +23,8 @@ class CreateTransactionsView extends Migration
           withdrawals.amount as debit,
           null as credit,
           withdrawals.date as date,
-          withdrawals.balance as balance
+          withdrawals.balance as balance,
+          withdrawals.created_at as created_at
           FROM withdrawals
           UNION
           SELECT deposits.id as id,
@@ -33,7 +34,8 @@ class CreateTransactionsView extends Migration
           null as debit,
           deposits.amount as credit,
           deposits.date as date,
-          deposits.balance as balance
+          deposits.balance as balance,
+          deposits.created_at as created_at
           FROM deposits
         )"
       );

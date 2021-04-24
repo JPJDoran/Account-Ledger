@@ -75,6 +75,7 @@
 
         <main class="col p-4">
             @yield('content')
+            @yield('modals')
         </main>
     </div>
 </body>

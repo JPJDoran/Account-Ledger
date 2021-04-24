@@ -7,6 +7,7 @@ use Illuminate\Queue\InteractsWithQueue;
 
 // Models
 Use App\Models\Account;
+Use App\Models\Deposit;
 
 class OpenAccount
 {
@@ -15,8 +16,7 @@ class OpenAccount
      *
      * @return void
      */
-    public function __construct()
-    {
+    public function __construct() {
         //
     }
 
@@ -26,11 +26,23 @@ class OpenAccount
      * @param  object  $event
      * @return void
      */
-    public function handle($event)
-    {
+    public function handle($event) {
         // On registration open a new bank account
-        Account::create([
+        $accountId = Account::create([
             'user_id' => $event->user->id
+        ])->id;
+
+        // Get the created account
+        $account = Account::find($accountId);
+
+        // Input first deposit log
+        Deposit::create([
+            'account_id' => $accountId,
+            'user_id' => $event->user->id,
+            'reference' => 'Opening Balance',
+            'amount' => $account->balance,
+            'date' => date('Y-m-d H:i:s'),
+            'balance' => $account->balance,
         ]);
     }
 }
