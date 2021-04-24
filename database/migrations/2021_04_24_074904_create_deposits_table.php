@@ -15,6 +15,7 @@ class CreateDepositsTable extends Migration
     {
         Schema::create('deposits', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('account_id');
             $table->foreignId('user_id');
             $table->string('reference')->nullable();
             $table->float('amount', 11, 2);

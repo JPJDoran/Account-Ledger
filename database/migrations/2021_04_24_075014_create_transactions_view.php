@@ -17,21 +17,23 @@ class CreateTransactionsView extends Migration
         CREATE VIEW transactions AS
         (
           SELECT withdrawals.id as id,
+          withdrawals.account_id as account_id,
           withdrawals.user_id as user_id,
           withdrawals.reference as reference,
-          withdrawals.amount as amount,
+          withdrawals.amount as debit,
+          null as credit,
           withdrawals.date as date,
-          withdrawals.balance as balance,
-          'withdrawal' as type
+          withdrawals.balance as balance
           FROM withdrawals
           UNION
           SELECT deposits.id as id,
+          deposits.account_id as account_id,
           deposits.user_id as user_id,
           deposits.reference as reference,
-          deposits.amount as amount,
+          null as debit,
+          deposits.amount as credit,
           deposits.date as date,
-          deposits.balance as balance,
-          'deposit' as type
+          deposits.balance as balance
           FROM deposits
         )"
       );

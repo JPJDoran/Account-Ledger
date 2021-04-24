@@ -15,6 +15,7 @@ class CreateWithdrawalsTable extends Migration
     {
         Schema::create('withdrawals', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('account_id');
             $table->foreignId('user_id');
             $table->string('reference')->nullable();
             $table->float('amount', 11, 2);

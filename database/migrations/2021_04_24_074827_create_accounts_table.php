@@ -16,6 +16,7 @@ class CreateAccountsTable extends Migration
         Schema::create('accounts', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id');
+            $table->string('name')->default('Current Account');
             $table->float('balance', 11, 2)->default('2000.00');
             $table->float('overdraft', 6, 2)->default('250.00');
             $table->timestamps();
