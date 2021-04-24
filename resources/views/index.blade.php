@@ -16,6 +16,15 @@
                         </div>
 
                         <div class="row mt-4">
+                            <div class="alert alert-secondary mb-0 d-none" role="alert" id="loading-spinner">
+                                <p class="mb-0 pb-0">
+                                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...
+                                </p>
+                            </div>
+
+                        </div>
+
+                        <div class="row">
                             <div id="account-container" class="col">
                                 {!! $accountDetails !!}
                             </div>

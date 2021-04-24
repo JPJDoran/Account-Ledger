@@ -24,6 +24,6 @@ return [
     'account-not-found' => 'Account not found',
     'account-owner-mismatch' => 'Account owner mismatch',
     'no-overdraft' => 'You do not have access to an overdraft with this account',
-    'overdraft-exceeded' => 'You have already exhausted your overdraft allowance'
+    'overdraft-exceeded' => 'This transaction will exceed your overdraft allowance'
 
 ];

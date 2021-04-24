@@ -24,9 +24,9 @@
                 <tr>
                     <td>{{ date('d-M-y', strtotime($transaction->date)) }}</td>
                     <td>{{ $transaction->reference }}</td>
-                    <td>{{ $transaction->debit ?? '-' }}</td>
-                    <td>{{ $transaction->credit ?? '-' }}</td>
-                    <td>{{ $transaction->balance }}</td>
+                    <td>{{ number_format($transaction->debit, 2) }}</td>
+                    <td>{{ number_format($transaction->credit, 2) }}</td>
+                    <td>{{ number_format($transaction->balance, 2) }}</td>
                     <td>{{ date('d/m/Y H:i:s', strtotime($transaction->created_at)) }}</td>
                 </tr>
             @endforeach

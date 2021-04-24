@@ -9,11 +9,11 @@
             </div>
             <div class="modal-body">
                 <div class="alert alert-danger d-none" role="alert" id="transaction-error" data-target="transaction-alert">
-                    <p class="mb-0 pb-0">@lang('acccounts.transaction.error')</p>
+                    <p class="mb-0 pb-0">@lang('accounts.transaction-error')</p>
                 </div>
 
                 <div class="alert alert-success d-none" role="alert" id="transaction-success" data-target="transaction-alert">
-                    <p class="mb-0 pb-0">@lang('acccounts.transaction.success')</p>
+                    <p class="mb-0 pb-0">@lang('accounts.transaction-success')</p>
                 </div>
 
                 <p>@lang('accounts.new-transaction-intro')</p>

@@ -1,4 +1,8 @@
+let token;
+
 $(document).ready(function() {
+    token = $('html').find('meta[name="csrf-token"]').attr('content');
+
     // On change of account reload account details
     $('#account-select').on('change', function() {
 
@@ -10,13 +14,22 @@ $(document).ready(function() {
         $('#transaction-form').find('input[name="account_id"]').val(id);
     });
 
+    // On modal close reset the form and the messages
+    $('#transaction-modal').on('hidden.bs.modal', function (event) {
+        // Reset the form
+        $('#transaction-form').trigger('reset');
+
+        // Hide existing messages
+        $('body').find('[data-target="transaction-alert"]').addClass('d-none');
+        $('body').find('.help-block').addClass('d-none');
+    });
+
     // On new transaction form submit, attempt to add transaction
     $('#transaction-form').on('submit', function(event) {
         event.preventDefault();
 
         let $alert;
         let $validation;
-        let token = $('html').find('meta[name="csrf-token"]').attr('content');
         let form = document.getElementById('transaction-form');
         let formData = new FormData(form);
 
@@ -58,6 +71,40 @@ $(document).ready(function() {
             $alert.removeClass('d-none');
 
             // reload transactions
+            refreshTransactions();
         });
     });
 });
+
+function refreshTransactions() {
+    let account_id = $('#account-select').val();
+    let $accountContainer = $('#account-container');
+    let $spinner = $('#loading-spinner');
+
+    $accountContainer.addClass('d-none');
+    $spinner.removeClass('d-none');
+
+    $.ajax({
+        url: '/accounts/getAccountDetailsAjax',
+        type: 'POST',
+        dataType: 'JSON',
+        data : { account_id },
+        headers: {
+            'X-CSRF-TOKEN': token
+        }
+    }).done(function(data) {
+        if (data.error) {
+            // Ajax update of content failed so refresh full page instead
+            location.reload();
+            return;
+        }
+
+        // Update content
+        $accountContainer.html(data.html);
+        $spinner.addClass('d-none');
+        $accountContainer.removeClass('d-none');
+
+        // Close modal
+        $('#transaction-modal').modal('hide');
+    });
+}

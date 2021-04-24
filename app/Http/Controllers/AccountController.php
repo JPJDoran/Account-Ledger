@@ -55,7 +55,7 @@ class AccountController extends Controller
         $summary = $this->getAccountSummary($account);
 
         // Get account transactions
-        $transactions = Auth::user()->Transactions->sortByDesc('created_at')->paginate(25);
+        $transactions = Auth::user()->Transactions->sortByDesc('created_at')->paginate(15);
         $transactions = view('accounts.partials.account-transactions', compact('account', 'transactions'))->render();
 
         return view('accounts.partials.account-details', compact('summary', 'transactions'))->render();
@@ -145,5 +145,28 @@ class AccountController extends Controller
         // Update account balance
         $account->balance = $transaction['balance'];
         $account->save();
+
+        return response()->json(['error' => false]);
+    }
+
+    public function getAccountDetailsAjax(Request $request) {
+        if (!IS_AJAX) {
+            abort('404');
+        }
+
+        $account = false;
+
+        if (!is_null($accountId = $request->account_id ?? null)) {
+            $account = Account::find($accountId);
+        }
+
+        // If no account returned or account belongs to someone else
+        if (!$account || $account->user_id != Auth::id()) {
+            return response()->json(['error' => true]);
+        }
+
+        $accountDetails = $this->getAccountDetails($account);
+
+        return response()->json(['error' => false, 'html'=> $accountDetails]);
     }
 }
