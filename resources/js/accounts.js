@@ -5,7 +5,7 @@ $(document).ready(function() {
 
     // On change of account reload account details
     $('#account-select').on('change', function() {
-
+        refreshTransactions();
     });
 
     // On open of the new transaction modal, set hidden account it field
