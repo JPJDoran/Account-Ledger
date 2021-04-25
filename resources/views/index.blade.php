@@ -7,11 +7,14 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-sm-12 col-md-2">
+                            <div class="col-sm-12 col-md-3">
                                 {!! $accountSelect !!}
                             </div>
-                            <div class="col text-right">
-                                <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#transaction-modal">Manage</button>
+                            <div class="col mb-1 mt-1 mb-md-0 mt-md-0">
+
+                            </div>
+                            <div class="col-sm-12 col-md-2 text-right">
+                                <button class="btn btn-primary btn-block" type="button" data-toggle="modal" data-target="#transaction-modal">Manage</button>
                             </div>
                         </div>
 
