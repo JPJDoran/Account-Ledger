@@ -12,4 +12,8 @@ class Transaction extends Model
     public function user() {
         return $this->belongsTo('App\Models\User');
     }
+
+    public function account() {
+        return $this->belongsTo('App\Models\Account');
+    }
 }
