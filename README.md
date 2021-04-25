@@ -19,13 +19,14 @@ With docker installed we can now progress to installing the project.
 1. Clone this repo to your local environment.
     1. If you're using windows you'll need to ensure you clone it to your WSL2 operating system to use docker desktop (see above).
 2. `cd` into the project.
-3. Install composer dependencies with `composer install`
-4. Install npm dependencies with `npm install`
-5. Build js/css with `npm run dev`
-6. Copy example env file `cp .env.example .env`
-7. Generate an encryption key `php artisan key:generate`
-8. Create a database on your local and update your .env file with the correct details
-9. Migrate database tables `php artisan migrate`
+3. Open a new command line tab in this folder and run `./vendor/bin/sail up` to launch the project
+4. Install composer dependencies with `composer install`
+5. Install npm dependencies with `npm install`
+6. Build js/css with `npm run dev`
+7. Copy example env file `cp .env.example .env`
+8. Generate an encryption key `php artisan key:generate`
+9. Create a database on your local and update your .env file with the correct details
+10. Migrate database tables `php artisan migrate`
 
 ## Limitations
 
